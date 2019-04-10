@@ -1,1 +1,3 @@
-main
+class Verifier
+    
+end
