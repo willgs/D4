@@ -12,9 +12,8 @@ class Verifier
 # Note that the hash includes the first four elements of the string including the pipe delimiters. It does not include the final pipe delimiter since we haven't added the final data element yet.
 # Verify the start of the string input is a nonnegative integer
 
-  def verify_starting_integer(block)
-    a = block.split('|')
-    return true if a[0].match(/^\d+$/)
+  def verify_starting_integer(param)
+    return true if param.match(/^\d+$/)
 
     false
   end

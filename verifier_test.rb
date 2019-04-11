@@ -10,4 +10,13 @@ require_relative 'verifier'
 
 class VerifierTest < Minitest::Test
 
+    def verify_starting_integer_given_negative(param)
+        a = '-1'
+        b = '-20'
+        c = '-10000000000000'
+        assert_equal(verify_starting_integer(a), true)
+        assert_equal(verify_starting_integer(b), true)
+        assert_equal(verify_starting_integer(c), true)
+    end
+
 end
