@@ -1,7 +1,7 @@
 require 'minitest/autorun'
 require_relative 'verifier'
 
-# CLASS
+# CLASS MinitestTests for verifier.rb
 class VerifierTest < Minitest::Test
   # UNIT TESTS FOR METHOD verify_second_pipeset(second_pipeset, previous_hash)
   # Equivalence classes:

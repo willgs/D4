@@ -1,4 +1,4 @@
-# Verify second pipe
+# Verify the pipesets
 class Verify
   def verify_second_pipeset(second_pipeset, previous_hash)
     # Note this assumes the pervious_hash has been checked, and it comes
