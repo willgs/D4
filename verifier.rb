@@ -8,15 +8,12 @@ class Verify
     # Error return values: 2 is hash value mismatch
     return 2 if second_pipeset != previous_hash
 
-<<<<<<< HEAD
   def verify_starting_integer(param)
     return true if param.match(/^\d+$/)
 
     false
-=======
     # Success
     0
->>>>>>> origin/master
   end
 
   def verify_fourth_pipeset(fourth_pipeset, previous_time)

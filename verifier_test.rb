@@ -113,7 +113,6 @@ class VerifierTest < Minitest::Test
     assert_equal 0, return_code
   end
 
-<<<<<<< HEAD
     def test_verify_starting_integer_given_negative
         ver = Verifier.new
         a = '-1'
@@ -125,7 +124,6 @@ class VerifierTest < Minitest::Test
     end
 
 end
-=======
   # If the milliseconds of the current lines fourth pipeset are equal to the milliseconds of the previous lines fourth
   # pipeset and the nanoseconds or the current lines fourth pipeset are greater than the previous line's fourth pipeset
   # return code 0 for success, times are validated
@@ -135,4 +133,3 @@ end
     assert_equal 0, return_code
   end
 end
->>>>>>> origin/master
