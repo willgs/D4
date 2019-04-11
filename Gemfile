@@ -11,3 +11,4 @@ source "https://rubygems.org"
 
 # List of all gems to be included in this project
 gem "minitest"
+gem 'rubocop-performance'
