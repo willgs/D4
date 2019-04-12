@@ -113,17 +113,126 @@ class VerifierTest < Minitest::Test
     assert_equal 0, return_code
   end
 
-    def test_verify_starting_integer_given_negative
-        ver = Verifier.new
-        a = '-1'
-        b = '-20'
-        c = '-10000000000000'
-        assert_equal ver.verify_starting_integer(a), false
-        assert_equal ver.verify_starting_integer(b), false
-        assert_equal ver.verify_starting_integer(c), false
-    end
+  # Verify the first pipeset
 
-end
+  def test_verify_first_pipeset_given_negative
+    ver = Verify.new
+    a = '-1'
+    b = '-20'
+    c = '-10000000000000'
+    assert_equal ver.verify_first_pipeset(a), false
+    assert_equal ver.verify_first_pipeset(b), false
+    assert_equal ver.verify_first_pipeset(c), false
+  end
+
+  def test_verify_first_pipeset_given_float
+    ver = Verify.new
+    a = '.5'
+    b = '11.55'
+    c = '0.0'
+    assert_equal ver.verify_first_pipeset(a), false
+    assert_equal ver.verify_first_pipeset(b), false
+    assert_equal ver.verify_first_pipeset(c), false
+  end
+
+  def test_verify_first_pipeset_given_non_numeric
+    ver = Verify.new
+    a = 'akf kdfj'
+    b = 'one'
+    c = '1eighty'
+    assert_equal ver.verify_first_pipeset(a), false
+    assert_equal ver.verify_first_pipeset(b), false
+    assert_equal ver.verify_first_pipeset(c), false
+  end
+
+  def test_verify_first_pipeset_given_correct_number
+    ver = Verify.new
+    a = '0'
+    b = '100'
+    c = '12'
+    assert_equal ver.verify_first_pipeset(a), true
+    assert_equal ver.verify_first_pipeset(b), true
+    assert_equal ver.verify_first_pipeset(c), true
+  end
+
+  # Verify the third pipeset
+
+  def test_verify_third_pipeset_given_single_malformed_transaction
+    ver = Verify.new
+    a = '569274 735567(12)'
+    b = '569274>7(12)'
+    c = '569>735567(12)'
+    d = '-569274>735567(12)'
+    e = '569274>-735567(12)'
+    f = '569274>735567(-12)'
+    g = '569274>735567(0.0)'
+    assert_equal ver.verify_third_pipeset(a), false
+    assert_equal ver.verify_third_pipeset(b), false
+    assert_equal ver.verify_third_pipeset(c), false
+    assert_equal ver.verify_third_pipeset(d), false
+    assert_equal ver.verify_third_pipeset(e), false
+    assert_equal ver.verify_third_pipeset(f), false
+    assert_equal ver.verify_third_pipeset(g), false
+  end
+
+  def test_verify_third_pipeset_given_multiple_malformed_transactions
+    ver = Verify.new
+    a = '569274>735567(12):-569274>735567(12)'
+    b = '569274>735567(12): 569274 > 735567(.1)'
+    c = '569274>73556712):569274>735567(12):569274>735567(12)'
+    assert_equal ver.verify_third_pipeset(a), false
+    assert_equal ver.verify_third_pipeset(b), false
+    assert_equal ver.verify_third_pipeset(c), false
+  end
+
+  def test_verify_third_pipeset_given_single_correctly_formed_transaction
+    ver = Verify.new
+    a = '569274>735567(12)'
+    b = '569876>000005(1)'
+    c = '069070>795599(0)'
+    assert_equal ver.verify_third_pipeset(a), true
+    assert_equal ver.verify_third_pipeset(b), true
+    assert_equal ver.verify_third_pipeset(c), true
+  end
+
+  def test_verify_third_pipeset_given_multiple_correctly_formed_transaction
+    ver = Verify.new
+    a = '569274>735567(12):569274>735567(7):563374>735567(0)'
+    b = '569876>000005(1):987898>735567(1):087898>735567(320):000898>735567(1)'
+    c = '569274>735567(0):569274>735567(3)'
+    assert_equal ver.verify_third_pipeset(a), true
+    assert_equal ver.verify_third_pipeset(b), true
+    assert_equal ver.verify_third_pipeset(c), true
+  end
+
+  def test_verify_fifth_pipeset_given_malformed_input
+    ver = Verify.new
+    a = 'aaa'
+    b = 'f'
+    c = '11111'
+    d = '1a2g'
+    e = '-1fa2'
+    assert_equal ver.verify_fifth_pipeset(a), false
+    assert_equal ver.verify_fifth_pipeset(b), false
+    assert_equal ver.verify_fifth_pipeset(c), false
+    assert_equal ver.verify_fifth_pipeset(d), false
+    assert_equal ver.verify_fifth_pipeset(e), false
+  end
+
+  def test_verify_fifth_pipeset_given_correct_input
+    ver = Verify.new
+    a = 'aaaa'
+    b = '1f1f'
+    c = '0000'
+    d = '0cac'
+    e = '99ff'
+    assert_equal ver.verify_fifth_pipeset(a), true
+    assert_equal ver.verify_fifth_pipeset(b), true
+    assert_equal ver.verify_fifth_pipeset(c), true
+    assert_equal ver.verify_fifth_pipeset(d), true
+    assert_equal ver.verify_fifth_pipeset(e), true
+  end
+
   # If the milliseconds of the current lines fourth pipeset are equal to the milliseconds of the previous lines fourth
   # pipeset and the nanoseconds or the current lines fourth pipeset are greater than the previous line's fourth pipeset
   # return code 0 for success, times are validated

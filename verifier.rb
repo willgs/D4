@@ -7,13 +7,28 @@ class Verify
     return 1 if !second_pipeset.match(/\A[a-z0-9]*\z/) || second_pipeset.empty? || second_pipeset.length > 4
     # Error return values: 2 is hash value mismatch
     return 2 if second_pipeset != previous_hash
+  end
 
-  def verify_starting_integer(param)
+  def verify_first_pipeset(param)
     return true if param.match(/^\d+$/)
 
     false
     # Success
-    0
+  end
+
+  # Verify the Third Pipeset
+  # FROM_ADDR>TO_ADDR(NUM_BILLCOINS_SENT) seperated
+  def verify_third_pipeset(param)
+    # if there are multiple transactions, split em
+    if param.include? ':'
+      transactions = param.split(':')
+      transactions.each do |a|
+        return false unless a.match(/^\d{6}\>\d{6}\(\d+\)$/)
+      end
+    else
+      return false unless param.match(/^\d{6}\>\d{6}\(\d+\)$/)
+    end
+    true
   end
 
   def verify_fourth_pipeset(fourth_pipeset, previous_time)
@@ -38,5 +53,12 @@ class Verify
 
     # Error return values: 3 is time out of order
     3
+  end
+
+  # Verify the Fifth Pipeset
+  def verify_fifth_pipeset(param)
+    return true if param.match(/^[a-f0-9]{4}$/)
+
+    false
   end
 end
