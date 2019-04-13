@@ -56,9 +56,33 @@ class Verify
   end
 
   # Verify the Fifth Pipeset
-  def verify_fifth_pipeset(param)
-    return true if param.match(/^[a-f0-9]{4}$/)
+  def verify_fifth_pipeset(param, block)
+    return false unless param.match(/^[a-f0-9]{4}$/)
 
+    #remove last pipeset
+    block = block[0...-5]
+
+    # counter for sum
+    counter = 0
+    # Unpack each character via U* (string_to_hash.unpack('U*')), thus converting them to its UTF-8 value
+    block = block.unpack('U*')
+    # For each value in the string, x, perform the following calculation ((x**3000) + (x**x) - (3**x)) * (7**x) and store that value
+    # Sum up all of those values
+    block.each do |val|
+      temp = ((val**3000) + (val**val) - (3**val)) * (7**val)
+      counter = counter + temp
+    end
+    
+    # Determine that value modulo 65536
+    mod = counter % 65536
+  
+    # Return the resulting value as a string version of the number in base-16 (hexadecimal)
+    result = mod.to_s(16)  #=> "a"
+
+    #check this hash against the hash given in the block
+    return true if result == param
+  
     false
+
   end
 end

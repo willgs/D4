@@ -205,6 +205,8 @@ class VerifierTest < Minitest::Test
     assert_equal ver.verify_third_pipeset(c), true
   end
 
+  #verify fifth pipeset
+
   def test_verify_fifth_pipeset_given_malformed_input
     ver = Verify.new
     a = 'aaa'
@@ -212,25 +214,25 @@ class VerifierTest < Minitest::Test
     c = '11111'
     d = '1a2g'
     e = '-1fa2'
-    assert_equal ver.verify_fifth_pipeset(a), false
-    assert_equal ver.verify_fifth_pipeset(b), false
-    assert_equal ver.verify_fifth_pipeset(c), false
-    assert_equal ver.verify_fifth_pipeset(d), false
-    assert_equal ver.verify_fifth_pipeset(e), false
+    assert_equal ver.verify_fifth_pipeset(a, ''), false
+    assert_equal ver.verify_fifth_pipeset(b, ''), false
+    assert_equal ver.verify_fifth_pipeset(c, ''), false
+    assert_equal ver.verify_fifth_pipeset(d, ''), false
+    assert_equal ver.verify_fifth_pipeset(e, ''), false
   end
 
   def test_verify_fifth_pipeset_given_correct_input
     ver = Verify.new
-    a = 'aaaa'
-    b = '1f1f'
-    c = '0000'
-    d = '0cac'
-    e = '99ff'
-    assert_equal ver.verify_fifth_pipeset(a), true
-    assert_equal ver.verify_fifth_pipeset(b), true
-    assert_equal ver.verify_fifth_pipeset(c), true
-    assert_equal ver.verify_fifth_pipeset(d), true
-    assert_equal ver.verify_fifth_pipeset(e), true
+    a = '288d'
+    b = '92a2'
+    c = '4d25'
+    d = '38c5'
+    e = '24a2'
+    assert_equal ver.verify_fifth_pipeset(a, '0|0|SYSTEM>569274(100)|1553184699.650330000|288d'), true
+    assert_equal ver.verify_fifth_pipeset(b, '1|288d|569274>735567(12):735567>561180(3):735567>689881(2):SYSTEM>532260(100)|1553184699.652449000|92a2'), true
+    assert_equal ver.verify_fifth_pipeset(c, '2|92a2|569274>577469(9):735567>717802(1):577469>402207(2):SYSTEM>794343(100)|1553184699.658215000|4d25'), true
+    assert_equal ver.verify_fifth_pipeset(d, '3|4d25|561180>444100(1):SYSTEM>569274(100)|1553184699.663411000|38c5'), true
+    assert_equal ver.verify_fifth_pipeset(e, '4|38c5|569274>689881(33):532260>794343(15):532260>236340(4):402207>070668(1):236340>600381(1):070668>039873(1):SYSTEM>937639(100)|1553184699.666989000|24a2'), true
   end
 
   # If the milliseconds of the current lines fourth pipeset are equal to the milliseconds of the previous lines fourth
