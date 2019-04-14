@@ -12,6 +12,9 @@ class Verify
     return 1 if !second_pipeset.match(/\A[a-z0-9]*\z/) || second_pipeset.empty? || second_pipeset.length > 4
     # Error return values: 2 is hash value mismatch
     return 2 if second_pipeset != previous_hash
+    
+    #Success
+    0
   end
 
   def verify_first_pipeset(param)
