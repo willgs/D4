@@ -37,7 +37,7 @@ class Verify
 
         # now we have to check for legitimate transfer
         party_one = param[0...6]
-        party_two = param[7...12]
+        party_two = param[7...13]
         num_bill_coins = param[/\(.*?\)/]
         num_bill_coins = num_bill_coins.gsub(/[()]/, "")
 
@@ -52,7 +52,7 @@ class Verify
       
       # now we have to check for legitimate transfer
       party_one = param[0...6]
-      party_two = param[7...12]
+      party_two = param[7...13]
       num_bill_coins = param[/\(.*?\)/]
       num_bill_coins = num_bill_coins.gsub(/[()]/, "")
 
