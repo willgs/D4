@@ -187,9 +187,9 @@ class VerifierTest < Minitest::Test
 
   def test_verify_third_pipeset_given_single_correctly_formed_transaction
     ver = Verify.new
-    a = '569274>735567(12)'
-    b = '569876>000005(1)'
-    c = '069070>795599(0)'
+    a = 'SYSTEM>735567(12)'
+    b = '735567>000005(8)'
+    c = '000005>795599(4)'
     assert_equal ver.verify_third_pipeset(a), true
     assert_equal ver.verify_third_pipeset(b), true
     assert_equal ver.verify_third_pipeset(c), true
@@ -197,12 +197,14 @@ class VerifierTest < Minitest::Test
 
   def test_verify_third_pipeset_given_multiple_correctly_formed_transaction
     ver = Verify.new
-    a = '569274>735567(12):569274>735567(7):563374>735567(0)'
-    b = '569876>000005(1):987898>735567(1):087898>735567(320):000898>735567(1)'
-    c = '569274>735567(0):569274>735567(3)'
+    a = 'SYSTEM>735567(12):735567>888888(12):888888>735567(5)'
     assert_equal ver.verify_third_pipeset(a), true
-    assert_equal ver.verify_third_pipeset(b), true
-    assert_equal ver.verify_third_pipeset(c), true
+  end
+
+  def test_verify_third_pipeset_given_not_sufficient_balance
+    ver = Verify.new
+    a = '888888>735567(12)'
+    assert_equal ver.verify_third_pipeset(a), false
   end
 
   #verify fifth pipeset
@@ -233,6 +235,27 @@ class VerifierTest < Minitest::Test
     assert_equal ver.verify_fifth_pipeset(c, '2|92a2|569274>577469(9):735567>717802(1):577469>402207(2):SYSTEM>794343(100)|1553184699.658215000|4d25'), true
     assert_equal ver.verify_fifth_pipeset(d, '3|4d25|561180>444100(1):SYSTEM>569274(100)|1553184699.663411000|38c5'), true
     assert_equal ver.verify_fifth_pipeset(e, '4|38c5|569274>689881(33):532260>794343(15):532260>236340(4):402207>070668(1):236340>600381(1):070668>039873(1):SYSTEM>937639(100)|1553184699.666989000|24a2'), true
+  end
+
+
+
+  def test_make_transfer_sufficient_funds
+    ver = Verify.new
+    a = '888888'
+    b = '000000'
+    c = 'SYSTEM'
+    d = 12
+    assert_equal ver.make_transfer(c, a, d), true
+    assert_equal ver.make_transfer(a, b, d), true
+  end
+
+  def test_make_transfer_insufficient_funds
+    ver = Verify.new
+    a = '888888'
+    b = '000001'
+    c = 'SYSTEM'
+    d = 12
+    assert_equal ver.make_transfer(a, b, d), false
   end
 
   # If the milliseconds of the current lines fourth pipeset are equal to the milliseconds of the previous lines fourth

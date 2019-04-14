@@ -1,5 +1,10 @@
 # Verify the pipesets
 class Verify
+
+  def initialize
+    @balances = {}
+  end
+
   def verify_second_pipeset(second_pipeset, previous_hash)
     # Note this assumes the pervious_hash has been checked, and it comes
     # from program memory to save on double checking time
@@ -20,14 +25,40 @@ class Verify
   # FROM_ADDR>TO_ADDR(NUM_BILLCOINS_SENT) seperated
   def verify_third_pipeset(param)
     # if there are multiple transactions, split em
+
     if param.include? ':'
       transactions = param.split(':')
+
       transactions.each do |a|
-        return false unless a.match(/^\d{6}\>\d{6}\(\d+\)$/)
+        return false unless a.match(/^\d{6}\>\d{6}\(\d+\)$/) || a.match(/\bSYSTEM\b>\d{6}\(\d+\)$/)
+
+        # now we have to check for legitimate transfer
+        party_one = param[0...6]
+        party_two = param[7...12]
+        num_bill_coins = param[/\(.*?\)/]
+        num_bill_coins = num_bill_coins.gsub(/[()]/, "")
+
+        # parse pipeset into first person, second person, and number of coins
+        return false unless make_transfer(party_one, party_two, num_bill_coins)
+      
       end
+
     else
-      return false unless param.match(/^\d{6}\>\d{6}\(\d+\)$/)
+
+      return false unless param.match(/^\d{6}\>\d{6}\(\d+\)$/) || param.match(/\bSYSTEM\b>\d{6}\(\d+\)$/)
+      
+      # now we have to check for legitimate transfer
+      party_one = param[0...6]
+      party_two = param[7...12]
+      num_bill_coins = param[/\(.*?\)/]
+      num_bill_coins = num_bill_coins.gsub(/[()]/, "")
+
+      # parse pipeset into first person, second person, and number of coins
+      return false unless make_transfer(party_one, party_two, num_bill_coins)
+
     end
+
+    puts 'got to end, all true'
     true
   end
 
@@ -84,5 +115,41 @@ class Verify
   
     false
 
+  end
+
+
+  def make_transfer(party_one, party_two, num_bill_coins)
+
+    puts ' '
+    @balances.each do |a|
+      puts a
+    end
+
+    # convert num_bill_coins to int
+    num_bill_coins = Integer(num_bill_coins)
+
+    # check to make sure party one has the balance to give
+    has_enough = false
+    @balances[party_one] = 0 unless @balances.key?(party_one)
+    @balances[party_two] = 0 unless @balances.key?(party_two)
+
+    #always make sure the system has enough bill coins
+    @balances['SYSTEM'] = 9999999
+
+    has_enough = true if num_bill_coins <= @balances[party_one] 
+
+    # if party one has enough coins, make the transfer and return true, else return false
+    if has_enough
+      @balances[party_one] = @balances[party_one] - num_bill_coins
+      @balances[party_two] = @balances[party_two] + num_bill_coins
+      return true
+    end
+
+    puts ' '
+    @balances.each do |a|
+      puts a
+    end
+
+    false
   end
 end
