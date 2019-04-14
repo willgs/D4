@@ -14,6 +14,10 @@ ver = Verify.new
 
 # verify that each block is syntactically valid, and is a valid block in the chain
 blocks.each do |block|
+
+    #take newline off of each line
+    block = block.gsub("\n","")
+
     raise ArgumentError, 'malformed blockchain' unless block.include? '|'
 
     pipesets = block.split('|')

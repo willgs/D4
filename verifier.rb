@@ -122,11 +122,6 @@ class Verify
 
   def make_transfer(party_one, party_two, num_bill_coins)
 
-    puts ' '
-    @balances.each do |a|
-      puts a
-    end
-
     # convert num_bill_coins to int
     num_bill_coins = Integer(num_bill_coins)
 
@@ -145,11 +140,6 @@ class Verify
       @balances[party_one] = @balances[party_one] - num_bill_coins
       @balances[party_two] = @balances[party_two] + num_bill_coins
       return true
-    end
-
-    puts ' '
-    @balances.each do |a|
-      puts a
     end
 
     false

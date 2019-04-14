@@ -235,6 +235,7 @@ class VerifierTest < Minitest::Test
     assert_equal ver.verify_fifth_pipeset(c, '2|92a2|569274>577469(9):735567>717802(1):577469>402207(2):SYSTEM>794343(100)|1553184699.658215000|4d25'), true
     assert_equal ver.verify_fifth_pipeset(d, '3|4d25|561180>444100(1):SYSTEM>569274(100)|1553184699.663411000|38c5'), true
     assert_equal ver.verify_fifth_pipeset(e, '4|38c5|569274>689881(33):532260>794343(15):532260>236340(4):402207>070668(1):236340>600381(1):070668>039873(1):SYSTEM>937639(100)|1553184699.666989000|24a2'), true
+
   end
 
 
