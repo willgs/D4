@@ -8,6 +8,7 @@ class Verify
     # Error return values: 2 is hash value mismatch
     return 2 if second_pipeset != previous_hash
     
+    #Success
     0
   end
 
