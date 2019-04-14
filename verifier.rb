@@ -18,9 +18,9 @@ class Verify
   end
 
   def verify_first_pipeset(param)
-    return true if param.match(/^\d+$/)
+    return 1 if param.match(/^\d+$/)
 
-    false
+    2
     # Success
   end
 
@@ -33,7 +33,7 @@ class Verify
       transactions = param.split(':')
 
       transactions.each do |a|
-        return false unless a.match(/^\d{6}\>\d{6}\(\d+\)$/) || a.match(/\bSYSTEM\b>\d{6}\(\d+\)$/)
+        return 1 unless a.match(/^\d{6}\>\d{6}\(\d+\)$/) || a.match(/\bSYSTEM\b>\d{6}\(\d+\)$/)
 
         # now we have to check for legitimate transfer
         party_one = param[0...6]
@@ -42,13 +42,13 @@ class Verify
         num_bill_coins = num_bill_coins.gsub(/[()]/, "")
 
         # parse pipeset into first person, second person, and number of coins
-        return false unless make_transfer(party_one, party_two, num_bill_coins)
+        return 2 unless make_transfer(party_one, party_two, num_bill_coins)
       
       end
 
     else
 
-      return false unless param.match(/^\d{6}\>\d{6}\(\d+\)$/) || param.match(/\bSYSTEM\b>\d{6}\(\d+\)$/)
+      return 3 unless param.match(/^\d{6}\>\d{6}\(\d+\)$/) || param.match(/\bSYSTEM\b>\d{6}\(\d+\)$/)
       
       # now we have to check for legitimate transfer
       party_one = param[0...6]
@@ -57,11 +57,11 @@ class Verify
       num_bill_coins = num_bill_coins.gsub(/[()]/, "")
 
       # parse pipeset into first person, second person, and number of coins
-      return false unless make_transfer(party_one, party_two, num_bill_coins)
+      return 4 unless make_transfer(party_one, party_two, num_bill_coins)
 
     end
 
-    true
+    5
   end
 
   def verify_fourth_pipeset(fourth_pipeset, previous_time)
@@ -90,7 +90,7 @@ class Verify
 
   # Verify the Fifth Pipeset
   def verify_fifth_pipeset(param, block)
-    return false unless param.match(/^[a-f0-9]{4}$/)
+    return 1 unless param.match(/^[a-f0-9]{4}$/)
 
     #remove last pipeset
     block = block[0...-5]
@@ -113,9 +113,9 @@ class Verify
     result = mod.to_s(16)  #=> "a"
 
     #check this hash against the hash given in the block
-    return true if result == param
+    return 2 if result == param
   
-    false
+    3
 
   end
 

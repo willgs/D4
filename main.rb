@@ -24,6 +24,8 @@ blocks.each do |block|
     raise ArgumentError, 'malformed blockchain' unless pipesets.length == 5
 
     # make sure first pipeset is valid, and going in correct numerical order
+    # returns 1 if the first pipeset of the block is correctly formatted
+    # returns 2 if the first pipeset of the block is incorrectly formatted
     raise ArgumentError, 'malformed blockchain' unless (ver.verify_first_pipeset(pipesets[0]) && (Integer(pipesets[0]) == counter))
 
     # increment the counter
@@ -33,6 +35,8 @@ blocks.each do |block|
     raise ArgumentError, 'malformed blockchain' unless ver.verify_second_pipeset(pipesets[1], previous_hash.to_s)
 
     # make sure third pipeset is valid
+    #returns 1 if the third pipeset is malformed
+    #returns 2 if the transactions was invalid (coin flow doesn't make sense)
     raise ArgumentError, 'malformed blockchain' unless ver.verify_third_pipeset(pipesets[2])
 
     # make sure fourth pipset is valid, passing previous time
@@ -42,6 +46,9 @@ blocks.each do |block|
     previous_time = pipesets[3]
 
     # make sure fifth pipeset is valid
+    # returns 1 if the fifth pipeset is not a 4 digit hex
+    # returns 2 if the fifth pipeset matches the passed hex
+    #returns 3 if the fifth pipeset does not match the passed hex
     raise ArgumentError, 'malformed blockchain' unless ver.verify_fifth_pipeset(pipesets[4], block)
 
     #set the blocks hash to the new previous hash
