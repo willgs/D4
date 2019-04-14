@@ -61,7 +61,6 @@ class Verify
 
     end
 
-    puts 'got to end, all true'
     true
   end
 
