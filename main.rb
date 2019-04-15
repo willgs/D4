@@ -2,7 +2,19 @@ require_relative 'verifier'
 require 'flamegraph'
 
 # take each block into a list
-filename = 'sample.txt'
+if ARGV.length != 1
+  puts 'invalid number of argumets'
+  exit
+end
+
+filename = ARGV[0]
+
+#Ruby function to check directory or file existence
+if !(File.exist?(filename)) 
+  puts 'file not found'
+  exit
+end
+
 blocks = IO.readlines(filename)
 
 # initialize counter to keep track of transaction number / help with ordering
