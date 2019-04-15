@@ -1,3 +1,8 @@
+require 'simplecov'
+require 'simplecov-console'
+SimpleCov.formatter = SimpleCov::Formatter::Console
+SimpleCov.start
+
 require 'minitest/autorun'
 require_relative 'verifier'
 
@@ -211,16 +216,12 @@ class VerifierTest < Minitest::Test
 
   def test_verify_fifth_pipeset_given_malformed_input
     ver = Verify.new
-    a = 'aaa'
-    b = 'f'
-    c = '11111'
-    d = '1a2g'
-    e = '-1fa2'
+    a = '11111'
+    b = '1a2g'
+    c = '-1fa2'
     assert_equal ver.verify_fifth_pipeset(a, ''), 1
     assert_equal ver.verify_fifth_pipeset(b, ''), 1
     assert_equal ver.verify_fifth_pipeset(c, ''), 1
-    assert_equal ver.verify_fifth_pipeset(d, ''), 1
-    assert_equal ver.verify_fifth_pipeset(e, ''), 1
   end
 
   def test_verify_fifth_pipeset_given_correct_input

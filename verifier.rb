@@ -12,11 +12,8 @@ class Verify
     # Error return values: 1 is incorrect syntax (Empty sets, invalid characters, or too long)
     return 1 if !second_pipeset.match(/\A[a-z0-9]*\z/) || second_pipeset.empty? || second_pipeset.length > 4
     # Error return values: 2 is hash value mismatch
-    puts ''
     second_pipeset = second_pipeset.gsub("\n","")
     previous_hash = previous_hash.gsub("\n","")
-    puts second_pipeset
-    puts previous_hash
     return 2 if second_pipeset != previous_hash
 
     # Success
