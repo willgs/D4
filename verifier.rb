@@ -12,8 +12,9 @@ class Verify
     # from program memory to save on double checking time
     # Error return values: 1 is incorrect syntax (Empty sets, invalid characters, or too long)
     return 1 if !second_pipeset.match(/\A[a-z0-9]*\z/) || second_pipeset.empty? || second_pipeset.length > 4
+
     # Error return values: 2 is hash value mismatch
-    second_pipeset = second_pipeset.gsub("\n","")
+    second_pipeset = second_pipeset.delete('\n')
     previous_hash = previous_hash.gsub("\n","")
     return 2 if second_pipeset != previous_hash
 
@@ -22,7 +23,7 @@ class Verify
   end
 
   def verify_first_pipeset(param)
-    return 1 if param.match(/^\d+$/)
+    return 1 if param =~ /^\d+$/
 
     2
     # Success
@@ -31,21 +32,19 @@ class Verify
   # Verify the Third Pipeset
   # FROM_ADDR>TO_ADDR(NUM_BILLCOINS_SENT) seperated
   def verify_third_pipeset(param)
-
     # if there are multiple transactions, split em
     if param.include? ':'
-      transactions = param.split(':')  
+      transactions = param.split(':')
 
       transactions.each do |a|
         return 1 unless a.match(/^\d{6}\>\d{6}\(\d+\)$/) || a.match(/\bSYSTEM\b>\d{6}\(\d+\)$/)
       end
       transactions.each do |a|
-      
         # now we have to check for legitimate transfer
         party_one = a[0...6]
         party_two = a[7...13]
         num_bill_coins = a[/\(.*?\)/]
-        num_bill_coins = num_bill_coins.gsub(/[()]/, "")
+        num_bill_coins = num_bill_coins.gsub(/[()]/, '')
 
         # parse pipeset into first person, second person, and number of coins
         return 2 unless make_transfer(party_one, party_two, num_bill_coins)
@@ -95,12 +94,11 @@ class Verify
 
   # Verify the Fifth Pipeset
   def verify_fifth_pipeset(param, block)
-
-    return 1 unless param.match(/^[a-f0-9]{1,4}$/)
+    return 1 unless param =~ /^[a-f0-9]{1,4}$/
 
     # remove last pipeset
     block = block.split('|')
-    block.pop()
+    block.pop
     block = block.join('|')
 
     # counter for sum
@@ -116,11 +114,11 @@ class Verify
     end
 
     # Determine that value modulo 65536
-    mod = counter % 65536
+    mod = counter % 65_536
 
     # Return the resulting value as a string version of the number in base-16 (hexadecimal)
     result = mod.to_s(16) #=> "a"
-    result = result.gsub("\n","")
+    result = result.delete('\n')
     param = param.gsub("\n","")
 
     # check this hash against the hash given in the block
@@ -130,7 +128,6 @@ class Verify
   end
 
   def make_transfer(party_one, party_two, num_bill_coins)
-  
     # convert num_bill_coins to int
     num_bill_coins = Integer(num_bill_coins)
 
@@ -140,7 +137,7 @@ class Verify
     @balances[party_two] = 0 unless @balances.key?(party_two)
 
     # always make sure the system has enough bill coins
-    @balances['SYSTEM'] = 9999999
+    @balances['SYSTEM'] = 9_999_999
 
     has_enough = true if num_bill_coins <= @balances[party_one] 
 

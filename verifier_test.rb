@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'simplecov'
 require 'simplecov-console'
 SimpleCov.formatter = SimpleCov::Formatter::Console
@@ -212,7 +214,7 @@ class VerifierTest < Minitest::Test
     assert_equal ver.verify_third_pipeset(a), 4
   end
 
-  #verify fifth pipeset
+  # verify fifth pipeset
 
   def test_verify_fifth_pipeset_given_malformed_input
     ver = Verify.new
@@ -232,14 +234,15 @@ class VerifierTest < Minitest::Test
     d = '38c5'
     e = '24a2'
     assert_equal ver.verify_fifth_pipeset(a, '0|0|SYSTEM>569274(100)|1553184699.650330000|288d'), 2
-    assert_equal ver.verify_fifth_pipeset(b, '1|288d|569274>735567(12):735567>561180(3):735567>689881(2):SYSTEM>532260(100)|1553184699.652449000|92a2'), 2
-    assert_equal ver.verify_fifth_pipeset(c, '2|92a2|569274>577469(9):735567>717802(1):577469>402207(2):SYSTEM>794343(100)|1553184699.658215000|4d25'), 2
+    f = '1|288d|569274>735567(12):735567>561180(3):735567>689881(2):SYSTEM>532260(100)|1553184699.652449000|92a2'
+    assert_equal ver.verify_fifth_pipeset(b, f), 2
+    g = '2|92a2|569274>577469(9):735567>717802(1):577469>402207(2):SYSTEM>794343(100)|1553184699.658215000|4d25'
+    assert_equal ver.verify_fifth_pipeset(c, g), 2
     assert_equal ver.verify_fifth_pipeset(d, '3|4d25|561180>444100(1):SYSTEM>569274(100)|1553184699.663411000|38c5'), 2
-    assert_equal ver.verify_fifth_pipeset(e, '4|38c5|569274>689881(33):532260>794343(15):532260>236340(4):402207>070668(1):236340>600381(1):070668>039873(1):SYSTEM>937639(100)|1553184699.666989000|24a2'), 2
-
+    h = '4|38c5|569274>689881(33):532260>794343(15):532260>236340(4):402207>070668(1):236340>600381(1):070668>039873(1)'
+    h += ':SYSTEM>937639(100)|1553184699.666989000|24a2'
+    assert_equal ver.verify_fifth_pipeset(e, h), 2
   end
-
-
 
   def test_make_transfer_sufficient_funds
     ver = Verify.new
@@ -255,7 +258,6 @@ class VerifierTest < Minitest::Test
     ver = Verify.new
     a = '888888'
     b = '000001'
-    c = 'SYSTEM'
     d = 12
     assert_equal ver.make_transfer(a, b, d), false
   end

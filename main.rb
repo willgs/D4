@@ -9,8 +9,8 @@ end
 
 filename = ARGV[0]
 
-#Ruby function to check directory or file existence
-if !(File.exist?(filename)) 
+# Ruby function to check directory or file existence
+unless File.exist?(filename)
   puts 'file not found'
   exit
 end
@@ -26,7 +26,6 @@ previous_time = 0.0
 ver = Verify.new
 
 Flamegraph.generate('flamegrapher.html') do
-
   # verify that each block is syntactically valid, and is a valid block in the chain
   blocks.each do |block|
     str = 'Line: ' + counter.to_s + ' Block chain invalidated - '
@@ -115,8 +114,6 @@ Flamegraph.generate('flamegrapher.html') do
   end
 
   ver.balances.each do |bal|
-    
     puts bal[0] + ': ' + bal[1].to_s + ' billcoins' unless bal[0] == 'SYSTEM'
   end
-
 end
