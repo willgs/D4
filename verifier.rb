@@ -28,18 +28,20 @@ class Verify
   # Verify the Third Pipeset
   # FROM_ADDR>TO_ADDR(NUM_BILLCOINS_SENT) seperated
   def verify_third_pipeset(param)
-    # if there are multiple transactions, split em
 
+    # if there are multiple transactions, split em
     if param.include? ':'
-      transactions = param.split(':')
+      transactions = param.split(':')  
 
       transactions.each do |a|
         return 1 unless a.match(/^\d{6}\>\d{6}\(\d+\)$/) || a.match(/\bSYSTEM\b>\d{6}\(\d+\)$/)
-
+      end
+      transactions.each do |a|
+      
         # now we have to check for legitimate transfer
-        party_one = param[0...6]
-        party_two = param[7...13]
-        num_bill_coins = param[/\(.*?\)/]
+        party_one = a[0...6]
+        party_two = a[7...13]
+        num_bill_coins = a[/\(.*?\)/]
         num_bill_coins = num_bill_coins.gsub(/[()]/, "")
 
         # parse pipeset into first person, second person, and number of coins
@@ -90,10 +92,13 @@ class Verify
 
   # Verify the Fifth Pipeset
   def verify_fifth_pipeset(param, block)
-    return 1 unless param.match(/^[a-f0-9]{4}$/)
+
+    return 1 unless param.match(/^[a-f0-9]{1,4}$/)
 
     # remove last pipeset
-    block = block[0...-6]
+    block = block.split('|')
+    block.pop()
+    block = block.join('|')
 
     # counter for sum
     counter = 0
@@ -108,10 +113,12 @@ class Verify
     end
 
     # Determine that value modulo 65536
-    mod = counter % 65_536
+    mod = counter % 65536
 
     # Return the resulting value as a string version of the number in base-16 (hexadecimal)
     result = mod.to_s(16) #=> "a"
+    result = result.gsub("\n","")
+    param = param.gsub("\n","")
 
     # check this hash against the hash given in the block
     return 2 if param == result
@@ -120,6 +127,7 @@ class Verify
   end
 
   def make_transfer(party_one, party_two, num_bill_coins)
+  
     # convert num_bill_coins to int
     num_bill_coins = Integer(num_bill_coins)
 
@@ -129,7 +137,7 @@ class Verify
     @balances[party_two] = 0 unless @balances.key?(party_two)
 
     # always make sure the system has enough bill coins
-    @balances['SYSTEM'] = 9_999_999
+    @balances['SYSTEM'] = 9999999
 
     has_enough = true if num_bill_coins <= @balances[party_one] 
 

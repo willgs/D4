@@ -120,9 +120,9 @@ class VerifierTest < Minitest::Test
     a = '-1'
     b = '-20'
     c = '-10000000000000'
-    assert_equal ver.verify_first_pipeset(a), false
-    assert_equal ver.verify_first_pipeset(b), false
-    assert_equal ver.verify_first_pipeset(c), false
+    assert_equal ver.verify_first_pipeset(a), 2
+    assert_equal ver.verify_first_pipeset(b), 2
+    assert_equal ver.verify_first_pipeset(c), 2
   end
 
   def test_verify_first_pipeset_given_float
@@ -130,9 +130,9 @@ class VerifierTest < Minitest::Test
     a = '.5'
     b = '11.55'
     c = '0.0'
-    assert_equal ver.verify_first_pipeset(a), false
-    assert_equal ver.verify_first_pipeset(b), false
-    assert_equal ver.verify_first_pipeset(c), false
+    assert_equal ver.verify_first_pipeset(a), 2
+    assert_equal ver.verify_first_pipeset(b), 2
+    assert_equal ver.verify_first_pipeset(c), 2
   end
 
   def test_verify_first_pipeset_given_non_numeric
@@ -140,9 +140,9 @@ class VerifierTest < Minitest::Test
     a = 'akf kdfj'
     b = 'one'
     c = '1eighty'
-    assert_equal ver.verify_first_pipeset(a), false
-    assert_equal ver.verify_first_pipeset(b), false
-    assert_equal ver.verify_first_pipeset(c), false
+    assert_equal ver.verify_first_pipeset(a), 2
+    assert_equal ver.verify_first_pipeset(b), 2
+    assert_equal ver.verify_first_pipeset(c), 2
   end
 
   def test_verify_first_pipeset_given_correct_number
@@ -150,9 +150,9 @@ class VerifierTest < Minitest::Test
     a = '0'
     b = '100'
     c = '12'
-    assert_equal ver.verify_first_pipeset(a), true
-    assert_equal ver.verify_first_pipeset(b), true
-    assert_equal ver.verify_first_pipeset(c), true
+    assert_equal ver.verify_first_pipeset(a), 1
+    assert_equal ver.verify_first_pipeset(b), 1
+    assert_equal ver.verify_first_pipeset(c), 1
   end
 
   # Verify the third pipeset
@@ -166,13 +166,13 @@ class VerifierTest < Minitest::Test
     e = '569274>-735567(12)'
     f = '569274>735567(-12)'
     g = '569274>735567(0.0)'
-    assert_equal ver.verify_third_pipeset(a), false
-    assert_equal ver.verify_third_pipeset(b), false
-    assert_equal ver.verify_third_pipeset(c), false
-    assert_equal ver.verify_third_pipeset(d), false
-    assert_equal ver.verify_third_pipeset(e), false
-    assert_equal ver.verify_third_pipeset(f), false
-    assert_equal ver.verify_third_pipeset(g), false
+    assert_equal ver.verify_third_pipeset(a), 3
+    assert_equal ver.verify_third_pipeset(b), 3
+    assert_equal ver.verify_third_pipeset(c), 3
+    assert_equal ver.verify_third_pipeset(d), 3
+    assert_equal ver.verify_third_pipeset(e), 3
+    assert_equal ver.verify_third_pipeset(f), 3
+    assert_equal ver.verify_third_pipeset(g), 3
   end
 
   def test_verify_third_pipeset_given_multiple_malformed_transactions
@@ -180,9 +180,9 @@ class VerifierTest < Minitest::Test
     a = '569274>735567(12):-569274>735567(12)'
     b = '569274>735567(12): 569274 > 735567(.1)'
     c = '569274>73556712):569274>735567(12):569274>735567(12)'
-    assert_equal ver.verify_third_pipeset(a), false
-    assert_equal ver.verify_third_pipeset(b), false
-    assert_equal ver.verify_third_pipeset(c), false
+    assert_equal ver.verify_third_pipeset(a), 1
+    assert_equal ver.verify_third_pipeset(b), 1
+    assert_equal ver.verify_third_pipeset(c), 1
   end
 
   def test_verify_third_pipeset_given_single_correctly_formed_transaction
@@ -190,21 +190,21 @@ class VerifierTest < Minitest::Test
     a = 'SYSTEM>735567(12)'
     b = '735567>000005(8)'
     c = '000005>795599(4)'
-    assert_equal ver.verify_third_pipeset(a), true
-    assert_equal ver.verify_third_pipeset(b), true
-    assert_equal ver.verify_third_pipeset(c), true
+    assert_equal ver.verify_third_pipeset(a), 5
+    assert_equal ver.verify_third_pipeset(b), 5
+    assert_equal ver.verify_third_pipeset(c), 5
   end
 
   def test_verify_third_pipeset_given_multiple_correctly_formed_transaction
     ver = Verify.new
     a = 'SYSTEM>735567(12):735567>888888(12):888888>735567(5)'
-    assert_equal ver.verify_third_pipeset(a), true
+    assert_equal ver.verify_third_pipeset(a), 5
   end
 
   def test_verify_third_pipeset_given_not_sufficient_balance
     ver = Verify.new
     a = '888888>735567(12)'
-    assert_equal ver.verify_third_pipeset(a), false
+    assert_equal ver.verify_third_pipeset(a), 4
   end
 
   #verify fifth pipeset
@@ -216,11 +216,11 @@ class VerifierTest < Minitest::Test
     c = '11111'
     d = '1a2g'
     e = '-1fa2'
-    assert_equal ver.verify_fifth_pipeset(a, ''), false
-    assert_equal ver.verify_fifth_pipeset(b, ''), false
-    assert_equal ver.verify_fifth_pipeset(c, ''), false
-    assert_equal ver.verify_fifth_pipeset(d, ''), false
-    assert_equal ver.verify_fifth_pipeset(e, ''), false
+    assert_equal ver.verify_fifth_pipeset(a, ''), 1
+    assert_equal ver.verify_fifth_pipeset(b, ''), 1
+    assert_equal ver.verify_fifth_pipeset(c, ''), 1
+    assert_equal ver.verify_fifth_pipeset(d, ''), 1
+    assert_equal ver.verify_fifth_pipeset(e, ''), 1
   end
 
   def test_verify_fifth_pipeset_given_correct_input
@@ -230,11 +230,11 @@ class VerifierTest < Minitest::Test
     c = '4d25'
     d = '38c5'
     e = '24a2'
-    assert_equal ver.verify_fifth_pipeset(a, '0|0|SYSTEM>569274(100)|1553184699.650330000|288d'), true
-    assert_equal ver.verify_fifth_pipeset(b, '1|288d|569274>735567(12):735567>561180(3):735567>689881(2):SYSTEM>532260(100)|1553184699.652449000|92a2'), true
-    assert_equal ver.verify_fifth_pipeset(c, '2|92a2|569274>577469(9):735567>717802(1):577469>402207(2):SYSTEM>794343(100)|1553184699.658215000|4d25'), true
-    assert_equal ver.verify_fifth_pipeset(d, '3|4d25|561180>444100(1):SYSTEM>569274(100)|1553184699.663411000|38c5'), true
-    assert_equal ver.verify_fifth_pipeset(e, '4|38c5|569274>689881(33):532260>794343(15):532260>236340(4):402207>070668(1):236340>600381(1):070668>039873(1):SYSTEM>937639(100)|1553184699.666989000|24a2'), true
+    assert_equal ver.verify_fifth_pipeset(a, '0|0|SYSTEM>569274(100)|1553184699.650330000|288d'), 2
+    assert_equal ver.verify_fifth_pipeset(b, '1|288d|569274>735567(12):735567>561180(3):735567>689881(2):SYSTEM>532260(100)|1553184699.652449000|92a2'), 2
+    assert_equal ver.verify_fifth_pipeset(c, '2|92a2|569274>577469(9):735567>717802(1):577469>402207(2):SYSTEM>794343(100)|1553184699.658215000|4d25'), 2
+    assert_equal ver.verify_fifth_pipeset(d, '3|4d25|561180>444100(1):SYSTEM>569274(100)|1553184699.663411000|38c5'), 2
+    assert_equal ver.verify_fifth_pipeset(e, '4|38c5|569274>689881(33):532260>794343(15):532260>236340(4):402207>070668(1):236340>600381(1):070668>039873(1):SYSTEM>937639(100)|1553184699.666989000|24a2'), 2
 
   end
 
