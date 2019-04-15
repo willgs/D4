@@ -19,10 +19,17 @@ blocks.each do |block|
   # take newline off of each line
   block = block.delete('\n')
 
-  raise ArgumentError, 'malformed blockchain' unless block.include? '|'
+  unless block.include? '|'
+    str += 'Bad line syntax, missing pipes '
+    puts str + 'Exiting'
+  end
 
   pipesets = block.split('|')
-  raise ArgumentError, 'malformed blockchain' unless pipesets.length == 5
+
+  if pipesets.length != 5
+    str += 'Bad line syntax, too many pipes '
+    puts str + 'Exiting'
+  end
 
   # make sure first pipeset is valid, and going in correct numerical order
   # returns 1 if the first pipeset of the block is correctly formatted
@@ -90,5 +97,4 @@ blocks.each do |block|
   end
   # set the blocks hash to the new previous hash
   previous_hash = pipesets[4]
-  puts "all passes " + counter.to_s
 end
