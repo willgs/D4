@@ -13,3 +13,6 @@ source "https://rubygems.org"
 gem "minitest"
 gem "simplecov"
 gem 'rubocop-performance'
+gem "flamegraph"
+gem "stackprof"
+gem "fast_stack"

@@ -2,6 +2,7 @@
 
 # Verify the pipesets
 class Verify
+  attr_reader :balances
   def initialize
     @balances = {}
   end
