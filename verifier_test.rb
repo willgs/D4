@@ -57,7 +57,7 @@ class VerifierTest < Minitest::Test
   # UNIT TESTS FOR METHOD verify_fourth_pipeset(fourth_pipeset, previous_time)
   # Equivalence classes:
   # Empty sets -> Error code 1
-  # Letters in the pipeset -> Error code 2
+  # Letters in the pipeset -> Error code 1
   # Time out of order, milliseconds out of order -> Error code 3
   # Time out of order, nanoseconds out of order -> Error code 3
   # Time out of order, times are equal -> Error code 3
@@ -75,7 +75,7 @@ class VerifierTest < Minitest::Test
   def test_non_numeric_times
     v = Verify.new
     return_code = v.verify_fourth_pipeset('123.2s1', '123.12')
-    assert_equal 2, return_code
+    assert_equal 1, return_code
   end
 
   # If the times are out of order such that the milliseconds of the current lines fourth pipeset are
@@ -84,7 +84,7 @@ class VerifierTest < Minitest::Test
   def test_out_of_order_times_milliseconds
     v = Verify.new
     return_code = v.verify_fourth_pipeset('100.99', '121.99')
-    assert_equal 3, return_code
+    assert_equal 2, return_code
   end
 
   # If the times are out of order such that the milliseconds are the same but the nanoseconds of current lines
@@ -93,7 +93,7 @@ class VerifierTest < Minitest::Test
   def test_out_of_order_times_nanoseconds
     v = Verify.new
     return_code = v.verify_fourth_pipeset('121.12', '121.99')
-    assert_equal 3, return_code
+    assert_equal 2, return_code
   end
 
   # If the times are out of order such that the milliseconds are the same but the nanoseconds of current lines
@@ -102,7 +102,7 @@ class VerifierTest < Minitest::Test
   def test_equal_nanoseconds
     v = Verify.new
     return_code = v.verify_fourth_pipeset('121.99', '121.99')
-    assert_equal 3, return_code
+    assert_equal 2, return_code
   end
 
   # If the milliseconds of the current lines fourth pipeset is greater than the milliseconds of the previous lines
